@@ -146,6 +146,77 @@ JNIEXPORT jlong JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_EltwiseForward
 JNIEXPORT jlong JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_EltwiseBackwardDescInit
   (JNIEnv *, jclass, jint, jlong, jlong, jfloat, jfloat);
 
+
+JNIEXPORT jlong JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ConvForwardDescInit(
+  JNIEnv *env, jclass cls,
+  int prop_kind,
+  int alg_kind,
+  long src_desc,
+  long weights_desc,
+  long bias_desc,
+  long dst_desc,
+  jintArray strides,
+  jintArray padding_l,
+  jintArray padding_r,
+  int padding_kind);
+
+JNIEXPORT jlong JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ConvBackwardWeightsDescInit(
+  JNIEnv *env, jclass cls,
+  int alg_kind,
+  long src_desc,
+  long diff_weights_desc,
+  long diff_bias_desc,
+  long diff_dst_desc,
+  jintArray strides,
+  jintArray padding_l,
+  jintArray padding_r,
+  int padding_kind);
+
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ConvBackwardDataDescInit(
+  JNIEnv *env, jclass cls,
+  int alg_kind,
+  long diff_src_desc,
+  long weights_desc,
+  long diff_dst_desc,
+  jintArray strides,
+  jintArray padding_l,
+  jintArray padding_r,
+  int padding_kind);
+
+  JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PoolingForwardDescInit(
+    JNIEnv *env, jclass cls,
+    int prop_kind,
+    int alg_kind,
+    long src_desc,
+    long dst_desc,
+    jintArray strides,
+    jintArray kernel,
+    jintArray padding_l,
+    jintArray padding_r,
+    int padding_kind);
+
+  JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PoolingBackwardDescInit(
+    JNIEnv *env, jclass cls,
+    int alg_kind,
+    long diff_src_desc,
+    long diff_dst_desc,
+    jintArray strides,
+    jintArray kernel,
+    jintArray padding_l,
+    jintArray padding_r,
+    int padding_kind);
+
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreate(
+  JNIEnv *env, jclass cls, long input, long output);
+
+JNIEXPORT int JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_MemoryPrimitiveDescEqual(
+  JNIEnv *env, jclass cls, long lhs, long rhs);
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveGetPrimitiveDesc(
+  JNIEnv *env, jclass cls, long primitive);
+
 #ifdef __cplusplus
 }
 #endif

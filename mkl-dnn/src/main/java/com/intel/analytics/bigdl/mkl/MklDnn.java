@@ -131,6 +131,10 @@ public class MklDnn {
         public static final int lrnWithinChannel         = 66;
     }
 
+    public static class PaddingKind {
+        public static final int mkldnnPaddingZero        = 0;
+    }
+
     public static boolean isLoaded() {
         return _isLoaded;
     }
@@ -164,4 +168,30 @@ public class MklDnn {
                                                      long srcDesc, float alpha, float beta);
     public native static long EltwiseBackwardDescInit(int algKind, long diffDataDesc,
                                                       long dataDesc, float alpha, float beta);
+    public native static long ConvForwardDescInit(int prop_kind, int alg_kind, long src_desc, long weights_desc,
+                                                  long bias_desc, long dst_desc,int[] strides, int[] padding_l,
+                                                  int[] padding_r, int padding_kind);
+
+    public native static long ConvBackwardWeightsDescInit(int alg_kind, long src_desc, long diff_weights_desc,
+                                                  long diff_bias_desc, long diff_dst_desc, int[] strides, int[] padding_l,
+                                                  int[] padding_r, int padding_kind);
+
+    public native static long ConvBackwardDataDescInit(int alg_kind, long diff_src_desc, long weights_desc,
+                                                          long diff_dst_desc, int[] strides, int[] padding_l,
+                                                          int[] padding_r, int padding_kind);
+
+    public native static long PoolingForwardDescInit(int prop_kind, int alg_kind,
+                                                     long src_desc, long dst_desc,
+                                                     int[] strides, int[] kernel, int[] padding_l,
+                                                     int[] padding_r, int padding_kind);
+
+    public native static long PoolingBackwardDescInit(int alg_kind, long diff_src_desc,
+                                                      long diff_dst_desc, int[] strides,
+                                                      int[] kernel, int[] padding_l, int[] padding_r, int padding_kind);
+
+    public native static long ReorderPrimitiveDescCreate(long input, long output);
+
+    public native static int MemoryPrimitiveDescEqual(long lhs, long rhs);
+
+    public native static long PrimitiveGetPrimitiveDesc(long primitive);
 }

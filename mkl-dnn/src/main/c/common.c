@@ -13,7 +13,12 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDescCr
   mkldnn_primitive_desc_t *primitive_desc =
     malloc(sizeof(mkldnn_primitive_desc_t));
 
-mkldnn_engine_t *j_engine = (mkldnn_engine_t *)engine;
+  mkldnn_engine_t *j_engine = (mkldnn_engine_t *)engine;
+//  mkldnn_engine_t *j_engine = malloc(sizeof(mkldnn_engine_t));
+//
+//  CHECK(mkldnn_engine_create(j_engine,
+//  (mkldnn_engine_kind_t)mkldnn_cpu,
+//  (size_t)0));
 
   CHECK(
     mkldnn_primitive_desc_create(
@@ -109,6 +114,70 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveCreate
 
   return (long)primitive;
 }
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreate(
+  JNIEnv *env, jclass cls, long input, long output) {
+     mkldnn_primitive_desc_t *reorder_primitive_desc =  malloc(sizeof(mkldnn_primitive_desc_t));
+
+     CHECK(
+       mkldnn_reorder_primitive_desc_create(
+         reorder_primitive_desc,
+         *((const_mkldnn_primitive_desc_t *)input),
+         *((const_mkldnn_primitive_desc_t *)output))
+     );
+
+     return (long)reorder_primitive_desc;
+  }
+
+
+/** Compares two descriptors of memory primitives.
+  * @return 1 if the descriptors are the same.
+  * @return 0 if the descriptors are different.
+  *
+  * Use this function to identify whether a reorder is required for the memory
+  * primitives.
+  */
+JNIEXPORT int JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_MemoryPrimitiveDescEqual(
+  JNIEnv *env, jclass cls, long lhs, long rhs) {
+     return mkldnn_memory_primitive_desc_equal(
+         *((const_mkldnn_primitive_desc_t *)lhs),
+         *((const_mkldnn_primitive_desc_t *)rhs));
+  }
+
+///** Queries primitive descriptor for primitive descriptor
+//*
+//* @returns NULL in case of any error */
+//const_mkldnn_primitive_desc_t MKLDNN_API mkldnn_primitive_desc_query_pd(
+//      const_mkldnn_primitive_desc_t primitive_desc, mkldnn_query_t what,
+//      int index);
+//
+//JNIEXPORT int JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDescQueryPd(
+//  JNIEnv *env, jclass cls, long lhs, long rhs) {
+//
+//     const_mkldnn_primitive_desc_t *query_pd =  malloc(sizeof(const_mkldnn_primitive_desc_t));
+//
+//
+//
+//     return mkldnn_memory_primitive_desc_equal(
+//         *((const_mkldnn_primitive_desc_t *)input),
+//         *((const_mkldnn_primitive_desc_t *)output));
+//  }
+
+
+/** Retrieves a reference to the @p primitive_desc descriptor of given @p
+ * primitive.
+ *
+ * @warning
+ *     Returned object must not be destroyed by user. 'const' qualifier of the
+ *     returned object prevents such attempts. */
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveGetPrimitiveDesc(
+  JNIEnv *env, jclass cls, long primitive) {
+
+     const_mkldnn_primitive_desc_t *primitive_desc =  malloc(sizeof(const_mkldnn_primitive_desc_t));
+     CHECK(mkldnn_primitive_get_primitive_desc(*((const_mkldnn_primitive_t *)primitive), primitive_desc));
+     return (long)primitive_desc;
+  }
+
 
 #ifdef __cplusplus
 }
