@@ -65,6 +65,29 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveCreate
   return (long)primitive;
 }
 
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveCreateNoPointer(
+  JNIEnv *env, jclass cls,
+  long primitive_desc)
+{
+//  jlong * j_inputs = (*env)->GetPrimitiveArrayCritical(env, inputs, JNI_FALSE);
+//  jlong * j_outputs = (*env)->GetPrimitiveArrayCritical(env, outputs, JNI_FALSE);
+  mkldnn_primitive_t *primitive = malloc(sizeof(mkldnn_primitive_t));
+
+  CHECK(
+    mkldnn_primitive_create(
+      primitive,
+      (const_mkldnn_primitive_desc_t)primitive_desc,
+      NULL,
+      NULL)
+     );
+
+//  (*env)->ReleasePrimitiveArrayCritical(env, inputs, j_inputs, 0);
+//  (*env)->ReleasePrimitiveArrayCritical(env, outputs, j_outputs, 0);
+
+  return (long)primitive;
+}
+
 JNIEXPORT void JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDestroy(
   JNIEnv *env, jclass cls,
   long primitive)
@@ -115,6 +138,8 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveCreate
   return (long)primitive;
 }
 
+// output is const_mkldnn_primitive_desc_t
+
 JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreate(
   JNIEnv *env, jclass cls, long input, long output) {
      mkldnn_primitive_desc_t *reorder_primitive_desc =  malloc(sizeof(mkldnn_primitive_desc_t));
@@ -123,12 +148,41 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiv
        mkldnn_reorder_primitive_desc_create(
          reorder_primitive_desc,
          *((const_mkldnn_primitive_desc_t *)input),
-         *((const_mkldnn_primitive_desc_t *)output))
+         (const_mkldnn_primitive_desc_t)output)
      );
 
      return (long)reorder_primitive_desc;
   }
 
+// output is const_mkldnn_primitive_desc_t
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreateOuptut(
+  JNIEnv *env, jclass cls, long input, long output) {
+     mkldnn_primitive_desc_t *reorder_primitive_desc =  malloc(sizeof(mkldnn_primitive_desc_t));
+
+     CHECK(
+       mkldnn_reorder_primitive_desc_create(
+         reorder_primitive_desc,
+         *((const_mkldnn_primitive_desc_t *)input),
+         (const_mkldnn_primitive_desc_t)output)
+       );
+
+     return (long)reorder_primitive_desc;
+  }
+
+// input is  const_mkldnn_primitive_desc_t
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreateInput(
+  JNIEnv *env, jclass cls, long input, long output) {
+
+   mkldnn_primitive_desc_t *reorder_primitive_desc =  malloc(sizeof(mkldnn_primitive_desc_t));
+
+   CHECK(
+     mkldnn_reorder_primitive_desc_create(
+       reorder_primitive_desc,
+       (const_mkldnn_primitive_desc_t)input,
+       *((const_mkldnn_primitive_desc_t *)output))
+   );
+   return (long)reorder_primitive_desc;
+}
 
 /** Compares two descriptors of memory primitives.
   * @return 1 if the descriptors are the same.
@@ -178,6 +232,26 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveGetPri
      return (long)primitive_desc;
   }
 
+/** Queries primitive descriptor for primitive descriptor
+ *
+ * @returns NULL in case of any error */
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDescQueryPd(
+  JNIEnv *env, jclass cls, long primitive, int what, int index) {
+
+    const_mkldnn_primitive_desc_t pd;
+    // pd = mkldnn_primitive_desc_query_pd(*((const_mkldnn_primitive_desc_t *)primitive), (mkldnn_query_t)what, index);
+
+    mkldnn_query_t t;
+    if (what == 1) {
+      t = mkldnn_query_src_pd;
+    } else if (what == 2) {
+      t = mkldnn_query_weights_pd;
+    } else {
+      t = mkldnn_query_dst_pd;
+    }
+    pd = mkldnn_primitive_desc_query_pd(*((const_mkldnn_primitive_desc_t *)primitive), t, index);
+    return (long)pd;
+}
 
 #ifdef __cplusplus
 }

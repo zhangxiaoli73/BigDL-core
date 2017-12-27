@@ -135,6 +135,34 @@ public class MklDnn {
         public static final int mkldnnPaddingZero        = 0;
     }
 
+
+    public static class Query {
+        public static final int undef                       = 1;
+        public static final int eengine                     = 2;
+        public static final int primitive_kind              = 8;
+        public static final int num_of_inputs_s32           = 9;
+        public static final int num_of_outputs_s32          = 11;
+        public static final int memory_consumption_s64      = 12;
+        public static final int memory_d                    = 14;
+        public static final int convolution_d               = 15;
+        public static final int relu_d                      = 16;
+        public static final int softmax_d                   = 17;
+        public static final int pooling_d                   = 34;
+        public static final int batch_normalization_d       = 40;
+        public static final int inner_product_d             = 41;
+        public static final int convolution_relu_d          = 42;
+        public static final int input_pd                    = 65;
+        public static final int output_pd                   = 66;
+        public static final int src_pd                      = 66;
+        public static final int diff_src_pd                 = 66;
+        public static final int weights_pd                  = 66;
+        public static final int diff_weights_pd             = 66;
+        public static final int dst_pd                      = 66;
+        public static final int diff_dst_pd                 = 66;
+        public static final int workspace_pd                = 66;
+
+    }
+
     public static boolean isLoaded() {
         return _isLoaded;
     }
@@ -191,7 +219,17 @@ public class MklDnn {
 
     public native static long ReorderPrimitiveDescCreate(long input, long output);
 
+    public native static long ReorderPrimitiveDescCreateOutput(long input, long output);
+
+    public native static long ReorderPrimitiveDescCreateInput(long input, long output);
+
     public native static int MemoryPrimitiveDescEqual(long lhs, long rhs);
 
     public native static long PrimitiveGetPrimitiveDesc(long primitive);
+
+    public native static long PrimitiveDescQueryPd(long primitive, int what, int index);
+
+    public native static long PrimitiveCreateNoPointer(long desc);
+
+    public native static long All();
 }
