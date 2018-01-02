@@ -246,8 +246,16 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDescQu
       t = mkldnn_query_src_pd;
     } else if (what == 2) {
       t = mkldnn_query_weights_pd;
-    } else {
+    } else if (what == 3) {
       t = mkldnn_query_dst_pd;
+    } else if (what == 4) {
+      t = mkldnn_query_diff_dst_pd; //gradOutput
+    } else if (what == 5) {
+      t = mkldnn_query_diff_src_pd; //gradInput
+    } else if (what == 6) {
+      t = mkldnn_query_diff_weights_pd; //gradWeight
+    } else {
+      t = mkldnn_query_workspace_pd;
     }
     pd = mkldnn_primitive_desc_query_pd(*((const_mkldnn_primitive_desc_t *)primitive), t, index);
     return (long)pd;

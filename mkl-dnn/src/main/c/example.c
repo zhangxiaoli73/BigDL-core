@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200112L
+
 #include "utils.h"
 #include "com_intel_analytics_bigdl_mkl_MklDnn.h"
 #include <string.h>

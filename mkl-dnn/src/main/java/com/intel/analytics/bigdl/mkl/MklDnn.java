@@ -232,4 +232,6 @@ public class MklDnn {
     public native static long PrimitiveCreateNoPointer(long desc);
 
     public native static long All();
+
+    public native static long PrimitiveDescQueryMemory(long primitive_desc);
 }

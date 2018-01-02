@@ -230,8 +230,11 @@ JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveCreate
 JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_ReorderPrimitiveDescCreateOuptut(
   JNIEnv *env, jclass cls, long input, long output);
 
-  JNIEXPORT void JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_All(
-    JNIEnv *env, jclass cls);
+JNIEXPORT void JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_All(
+  JNIEnv *env, jclass cls);
+
+JNIEXPORT long JNICALL Java_com_intel_analytics_bigdl_mkl_MklDnn_PrimitiveDescQueryMemory(
+  JNIEnv *env, jclass cls, long primitive_desc);
 
 
 #ifdef __cplusplus
