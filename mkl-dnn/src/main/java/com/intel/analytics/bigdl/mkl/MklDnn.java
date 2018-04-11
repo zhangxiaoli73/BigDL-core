@@ -372,4 +372,21 @@ public class MklDnn {
     public native static long ViewPrimitiveDescCreate(long memory_primitive_desc,
                                                       int[] dims,
                                                       int[] offsets);
+
+
+    public native static long ConcatPrimitive(long output_desc, int n,
+                                              int concat_dimension,
+                                              long[] input_pds, long engine,
+                                              long input1_memory,
+                                              long input2_memory,
+                                              long dst_memory);
+
+    public native static long PrimitiveCreateNew(long concat_desc,
+                                              long input1_memory,
+                                              long input2_memory,
+                                              long dst_memory);
+
+    public native static void ConcatExample();
+
+    public native static void FreeUnuse(long dnn_desc);
 }

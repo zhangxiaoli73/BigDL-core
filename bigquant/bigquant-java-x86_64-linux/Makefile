@@ -6,5 +6,4 @@ SUFFIX = so
 
 all:
 ifeq ($(PLATFORM), LINUX)
-include ../Makefile.common
 endif
